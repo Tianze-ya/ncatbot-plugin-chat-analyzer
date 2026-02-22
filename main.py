@@ -38,7 +38,7 @@ class ChatAnalyzer(NcatBotPlugin):
             "需要订阅的群组列表",
             list,
         )
-        self.register_config("expected_uid", [], "忽略聊天记录的用户ID列表", list)
+        self.register_config("except_uid", [], "忽略聊天记录的用户ID列表", list)
 
     def init_scheduler(self):
         """初始化定时任务"""
@@ -109,8 +109,8 @@ class ChatAnalyzer(NcatBotPlugin):
 
         # 移除预期内的用户ID
         for group_msg in chat_histories:
-            if group_msg.user_id in self.config["expected_uid"]:
-                chat_histories.remove(group_msg.user_id)
+            if group_msg.user_id in self.config["except_uid"]:
+                chat_histories.remove(group_msg)
 
         self.log.info(f"从群 {group_id} 获取到 {len(chat_histories)} 条聊天记录")
         group_info = await self.api.get_group_info(group_id)
