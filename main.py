@@ -139,6 +139,7 @@ class ChatAnalyzer(NcatBotPlugin):
         for group_msg in chat_histories:
             if group_msg.user_id in self.config["except_uid"]:
                 chat_histories.remove(group_msg)
+                print(43423)
 
         self.log.info(f"从群 {group_id} 获取到 {len(chat_histories)} 条聊天记录")
         group_info = await self.api.get_group_info(group_id)
