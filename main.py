@@ -135,12 +135,10 @@ class ChatAnalyzer(NcatBotPlugin):
         if len(chat_histories) < self.config["minimum_message_count"]:
             raise ValueError("聊天记录数量不足，无法进行分析喵~")
 
-        print(len(chat_histories))
         # 移除预期内的用户ID
         for group_msg in chat_histories:
             if group_msg.user_id in self.config["except_uid"]:
                 chat_histories.remove(group_msg)
-        print(len(chat_histories))
 
         self.log.info(f"从群 {group_id} 获取到 {len(chat_histories)} 条聊天记录")
         group_info = await self.api.get_group_info(group_id)
