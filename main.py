@@ -110,7 +110,7 @@ class ChatAnalyzer(NcatBotPlugin):
         # 移除预期内的用户ID
         for group_msg in chat_histories:
             if group_msg.user_id in self.config["expected_uid"]:
-                self.config["expected_uid"].remove(group_msg.user_id)
+                chat_histories.remove(group_msg.user_id)
 
         self.log.info(f"从群 {group_id} 获取到 {len(chat_histories)} 条聊天记录")
         group_info = await self.api.get_group_info(group_id)
