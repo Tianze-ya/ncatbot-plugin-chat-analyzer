@@ -8,6 +8,7 @@ from ncatbot.plugin_system import (
 )
 from ncatbot.utils import get_log
 from ncatbot.core import GroupMessageEvent
+from ncatbot.core.event.message_segment import At
 from ncatbot.plugin_system.builtin_plugin.unified_registry.command_system.registry.help_system import (
     HelpGenerator,
 )
@@ -82,6 +83,33 @@ class ChatAnalyzer(NcatBotPlugin):
         except Exception as e:
             self.log.error(f"分析失败: {e}", exc_info=True)
             await event.reply(f"分析失败喵~错误信息: {str(e)}")
+
+    @admin_group_filter
+    @ca_group.command("except", description="添加需要忽略的用户ID")
+    @require_subscription
+    async def cmd_except(self, event: GroupMessageEvent, at: At):
+        """添加需要忽略的用户ID"""
+        if not at:
+            await event.reply("请@需要忽略的用户喵~")
+            return
+
+        self.config["except_uid"].append(at.qq)
+        await event.reply("已添加需要忽略的用户ID喵~")
+
+    @admin_group_filter
+    @ca_group.command("unexcept", description="删除需要忽略的用户ID")
+    @require_subscription
+    async def cmd_unexcept(self, event: GroupMessageEvent, at: At):
+        """删除需要忽略的用户ID"""
+        if not at:
+            await event.reply("请@删除忽略的用户喵~")
+            return
+        if at.qq not in self.config["except_uid"]:
+            await event.reply("该用户ID不在忽略列表中喵~")
+            return
+
+        self.config["except_uid"].append(at.qq)
+        await event.reply("已删除需要忽略的用户ID喵~")
 
     @root_filter
     @ca_group.command("test", description="测试指令")
